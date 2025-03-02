@@ -1,0 +1,20 @@
+[[dependencies]]
+name = "account-abstraction"
+version = "0.7.0"
+url = "https://github.com/eth-infinitism/account-abstraction/archive/refs/tags/v0.7.0.zip"
+checksum = "e525c32e465c776910ea8cb7f2696a1f480a63f656b87cd7a240944d1afaa393"
+integrity = "5a359d8124f0fc9a454310d86b10f3eff96d4d1d0090bcdd85af9ba3a92d030b"
+
+[[dependencies]]
+name = "forge-std"
+version = "1.9.6"
+url = "https://soldeer-revisions.s3.amazonaws.com/forge-std/1_9_6_01-02-2025_20:49:10_forge-std-1.9.zip"
+checksum = "55f341818321b3f925161a72fd0dcd62e4a0a4b66785a7a932bf2bfaf96fb9d1"
+integrity = "e9ecdc364d152157431e5df5aa041ffddbe9bb1c1ad81634b1e72df9e23814e8"
+
+[[dependencies]]
+name = "solady"
+version = "0.1.10"
+url = "https://github.com/Vectorized/solady/archive/refs/tags/v0.1.10.zip"
+checksum = "538f974807036334da18cad021e68d2d1961474d2d2dd8afbc1bc6ab43fd6da5"
+integrity = "6cb2109a9cf02457541a47edd1429db8cfcd1cf783ce6ea62dfbe090cb074d24"

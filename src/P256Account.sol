@@ -52,9 +52,14 @@ contract P256Account is BaseAccount, Ownable, IAccountExecute {
         (userOpHash);
         _requireFromEntryPoint();
 
-        (address destination, uint256 value, bytes memory data) = abi.decode(userOp.callData, (address, uint256, bytes));
+        (address destination, uint256 value, bytes memory data) = abi.decode(userOp.callData[4:], (address, uint256, bytes));
         (bool success, bytes memory err) = destination.call{value: value}(data);
         require(success, P256Account__CallFailed(err));
+    }
+
+    // getPublicKey
+    function getPublicKey() external view returns (PublicKey memory) {
+        return s_publicKey;
     }
 
     function entryPoint() public view override returns (IEntryPoint) {
@@ -83,8 +88,7 @@ contract P256Account is BaseAccount, Ownable, IAccountExecute {
 
     // _setPublicKey
     function _setPublicKey(PublicKey memory newPublicKey) internal {
-        s_publicKey = newPublicKey;
-
         emit P256Account__PublicKeyChanged(s_publicKey, newPublicKey);
+        s_publicKey = newPublicKey;
     }
 }

@@ -1,4 +1,11 @@
 [[dependencies]]
+name = "@openzeppelin/contracts"
+version = "5.2.0"
+url = "https://github.com/OpenZeppelin/openzeppelin-contracts/archive/refs/tags/v5.2.0.zip"
+checksum = "153b3eb6220d019f39de7c546754158705f290957fdbc02e13f4c96655496019"
+integrity = "7a943ec0b157a48b08d1b2dcb2c5f3949da8514a92d102c4b95e49ff7cbb1294"
+
+[[dependencies]]
 name = "account-abstraction"
 version = "0.7.0"
 url = "https://github.com/eth-infinitism/account-abstraction/archive/refs/tags/v0.7.0.zip"

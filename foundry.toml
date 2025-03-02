@@ -3,6 +3,7 @@ src = "src"
 out = "out"
 libs = ["lib", "dependencies"]
 remappings = [
+    "@openzeppelin/=dependencies/@openzeppelin-contracts-5.2.0/",
     "account-abstraction/=dependencies/account-abstraction-0.7.0/contracts/",
     "forge-std/=dependencies/forge-std-1.9.6/src/",
     "solady/=dependencies/solady-0.1.10/src/",
@@ -19,4 +20,5 @@ remappings_location = "config"
 forge-std = "1.9.6"
 solady = { version = "0.1.10", url = "https://github.com/Vectorized/solady/archive/refs/tags/v0.1.10.zip" }
 account-abstraction = { version = "0.7.0", url = "https://github.com/eth-infinitism/account-abstraction/archive/refs/tags/v0.7.0.zip" }
+"@openzeppelin/contracts" = { version = "5.2.0", url = "https://github.com/OpenZeppelin/openzeppelin-contracts/archive/refs/tags/v5.2.0.zip" }
 # See more config options https://github.com/foundry-rs/foundry/blob/master/crates/config/README.md#all-options

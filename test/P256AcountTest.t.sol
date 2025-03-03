@@ -10,6 +10,7 @@ import {P256Account} from "src/P256Account.sol";
 import {PackedUserOperation} from "account-abstraction/interfaces/PackedUserOperation.sol";
 import {EntryPoint} from "account-abstraction/core/EntryPoint.sol";
 import {IAccountExecute} from "account-abstraction/interfaces/IAccountExecute.sol";
+import {IEntryPoint} from "account-abstraction/interfaces/IEntryPoint.sol";
 
 import {Ownable} from "solady/auth/Ownable.sol";
 
@@ -18,7 +19,7 @@ import {Ownable} from "solady/auth/Ownable.sol";
 // check owner address, entryPoint & public key values - DONE
 // onlyOwner functions - DONE
 // signature validation and userOp execution
-// errors
+// errors - DONE
 
 contract RevertOnEthReceived {
     receive() external payable {
@@ -36,7 +37,7 @@ contract P256AccountTest is Test {
         // create entryPoint
         s_entryPoint = new EntryPoint();
         // create privateKey & public key
-        s_privateKey = vm.randomUint();
+        s_privateKey = 123456;
         (uint256 x, uint256 y) = vm.publicKeyP256(s_privateKey);
         P256Account.PublicKey memory publicKey = P256Account.PublicKey(bytes32(x), bytes32(y));
 
@@ -124,5 +125,52 @@ contract P256AccountTest is Test {
         );
         vm.prank(address(s_entryPoint));
         s_p256Account.executeUserOp(userOp, userOpHash);
+    }
+
+    function testValidationAndExecutionOfUserOp() public {
+        // create receiver
+        address receiver = makeAddr("receiver");
+        assertEq(receiver.balance, 0);
+
+        // create userOp
+        PackedUserOperation memory userOp = PackedUserOperation({
+            sender: address(s_p256Account),
+            nonce: 0,
+            initCode: bytes(""),
+            callData: bytes(""),
+            accountGasLimits: bytes32(uint256(100_000) << 128 | uint256(100_000)),
+            preVerificationGas: 0,
+            gasFees: bytes32(0),
+            paymasterAndData: bytes(""),
+            signature: bytes("")
+        });
+
+        // create callData
+        userOp.callData = abi.encodeWithSelector(P256Account.execute.selector, receiver, 1 ether, bytes(""));
+
+        // create signature
+        bytes32 digest = s_entryPoint.getUserOpHash(userOp);
+        (bytes32 r, bytes32 s) = vm.signP256(s_privateKey, digest);
+        userOp.signature = abi.encode(r, s);
+
+        // create userOps array
+        PackedUserOperation[] memory userOps = new PackedUserOperation[](1);
+        userOps[0] = userOp;
+
+        // bundler
+        address payable bundler = payable(makeAddr("bundler"));
+
+        // check public key
+        (uint256 x, uint256 y) = vm.publicKeyP256(s_privateKey);
+        P256Account.PublicKey memory publicKey = P256Account.PublicKey(bytes32(x), bytes32(y));
+        assertEq(keccak256(abi.encode(s_p256Account.getPublicKey())), keccak256(abi.encode(publicKey)));
+
+        // expectEmit
+        vm.expectEmit(true, true, true, false, address(s_entryPoint));
+        emit IEntryPoint.UserOperationEvent(digest, address(s_p256Account), address(0), 0, false, 0, 0);
+        // handleOps call
+        s_entryPoint.handleOps(userOps, bundler);
+
+        assertEq(receiver.balance, 1 ether);
     }
 }

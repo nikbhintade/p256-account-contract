@@ -76,7 +76,7 @@ contract P256Account is BaseAccount, Ownable, IAccountExecute {
         (bytes32 r, bytes32 s) = abi.decode(userOp.signature, (bytes32, bytes32));
 
         // verify the signature
-        bool isVerified = P256.verifySignature(userOpHash, s_publicKey.x, s_publicKey.y, r, s);
+        bool isVerified = P256.verifySignature(userOpHash, r, s, s_publicKey.x, s_publicKey.y);
 
         // return correct validationData
         return _packValidationData(isVerified, uint48(block.timestamp + 20 minutes), 0);
